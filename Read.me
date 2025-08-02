@@ -1,0 +1,68 @@
+
+
+## 🌱 **"Paiso Ka Ped" (PKP) Investment Tracker MVP**
+
+### 🔑 Key Features
+
+| Feature                | Description                                             |
+| ---------------------- | ------------------------------------------------------- |
+| 📥 Weekly SIP Entry    | Input ETF (e.g., NiftyBEES), Date, Price, Investment    |
+| 🧮 PKP Avg Tracking    | Automatically recalculates average based on strategy    |
+| 💰 Profit Check        | Compares LTP to PKP average, books profit when eligible |
+| 📊 Ledger              | Shows all transactions (Buy/Sell) and running profit    |
+| 🧾 Google Sheet Sync   | Persists all data on your Google Sheet                  |
+| 📈 Charting (optional) | Visualize investment growth & profit booked             |
+
+---
+
+## 🔧 What You Need
+
+### ✅ 1. **Google Sheet Setup**
+
+* Create a new Google Sheet (e.g., `PKP_Tracker`)
+* Share it with a service account (we’ll generate it in a step)
+
+---
+
+### ✅ 2. **Enable Google Sheets API**
+
+Go to: [https://console.cloud.google.com/apis/dashboard](https://console.cloud.google.com/apis/dashboard)
+Enable:
+
+* Google Sheets API
+* Google Drive API
+
+---
+
+### ✅ 3. **Service Account + Credentials**
+
+#### 🔐 Steps:
+
+1. Go to: [https://console.cloud.google.com/iam-admin/serviceaccounts](https://console.cloud.google.com/iam-admin/serviceaccounts)
+2. Create a new service account.
+3. Generate a **JSON key file**.
+4. Share your Google Sheet with the service account’s email (e.g., `xyz@project.iam.gserviceaccount.com`)
+
+---
+
+### ✅ 4. **Install Required Python Packages**
+
+
+pip install streamlit gspread oauth2client pandas
+```
+
+Once these steps are done 
+
+Next Steps:
+
+1. Replace `"gspread_creds.json"` with your actual [Google Service Account JSON file](https://docs.gspread.org/en/latest/oauth2.html).
+2. Create a Google Sheet named `PKP_Tracker` with headers:
+
+   ```
+   Date, ETF, Price, Amount, Units, Type, Profit
+   ```
+3. Run with:
+
+   ```bash
+   streamlit run your_script.py
+   ```
