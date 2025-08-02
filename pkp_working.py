@@ -4,6 +4,7 @@ import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 from datetime import datetime
 import math
+import yfinance as yf
 
 # --- Google Sheets Setup ---
 scope = [
@@ -89,7 +90,24 @@ elif choice == "Check PKP Profit":
     st.subheader("💰 Check for Profit Booking")
     etf = st.text_input("ETF Name (e.g. NiftyBEES)")
     ltp = st.number_input("Latest Traded Price (LTP)", min_value=0.0, step=0.01)
-    
+    if etf:
+        ticker_map = {
+            "NiftyBEES": "NIFTYBEES.NS",  # BSE ticker
+            "BankBEES": "BANKBEES.NS"
+            }
+        ticker_symbol = ticker_map.get(etf.strip(), None)
+
+        if ticker_symbol:
+            try:
+                ticker = yf.Ticker(ticker_symbol)
+                ltp = ticker.history(period='1d')['Close'].iloc[-1]
+                st.success(f"✅ Latest LTP for {etf} fetched from Yahoo Finance: ₹{ltp:.2f}")
+            except:
+                st.warning("⚠️ Could not fetch live data. Please enter LTP manually.")
+        else:
+            ltp = st.number_input("Enter LTP manually (ETF not in ticker map)", min_value=0.0, step=0.01)
+    else:
+        ltp = st.number_input("Enter ETF and then fetch LTP", min_value=0.0, step=0.01)
     if etf and ltp > 0:
         pkp_avg = calculate_pkp_avg(df, etf)
         st.write(f"📉 Current PKP Average: ₹{pkp_avg:.2f}")
