@@ -39,6 +39,7 @@ def calculate_pkp_avg(df, etf):
     return total_cost / total_units if total_units else 0
 
 def book_profit(date, etf, ltp, pkp_avg, df):
+    df=df[df['ETF'] == etf]
     buy_df = df[df['Type'] == 'BUY']
     sell_units = df[df['Type'] == 'SELL']['Units'].sum()
     total_units = buy_df['Units'].sum() - sell_units
