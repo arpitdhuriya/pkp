@@ -5,7 +5,7 @@ from oauth2client.service_account import ServiceAccountCredentials
 from datetime import datetime
 import math
 import yfinance as yf
-
+import json
 # --- Google Sheets Setup ---
 scope = [
     "https://spreadsheets.google.com/feeds",
@@ -13,8 +13,17 @@ scope = [
 ]
 
 # Load credentials (place your JSON file path here)
-creds = ServiceAccountCredentials.from_json_keyfile_name("/mnt/c/Users/lenovo/Downloads/cred.json", scope)
-client = gspread.authorize(creds)
+uploaded_file = st.file_uploader("🔐 Upload your Google Service Account `cred.json`", type=["json"])
+
+if uploaded_file is not None:
+    creds = ServiceAccountCredentials.from_json_keyfile_dict(
+        json.loads(uploaded_file.read().decode()), scope
+    )
+    client = gspread.authorize(creds)
+    sheet = client.open("PKP_Tracker").sheet1
+else:
+    st.warning("Please upload your `cred.json` to access the Google Sheet.")
+    st.stop()
 
 # Google Sheet setup
 sheet = client.open("PKP_Tracker").sheet1
